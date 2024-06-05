@@ -18,12 +18,12 @@
         canvas {
             border: 5px solid #ffffff;
         }
-        #menu, #skillTree, #settings, #advancedShop, #scoreShop {
+        #menu, #skillTree, #settings, #advancedShop, #scoreShop, #inventory { /* Added #inventory */
             display: none;
             flex-direction: column;
             align-items: center;
         }
-        #menu button, #skillTree button, #settings button, #advancedShop button, #scoreShop button {
+        #menu button, #skillTree button, #settings button, #advancedShop button, #scoreShop button, #inventory button { /* Added #inventory */
             margin: 10px;
             padding: 10px;
             font-size: 16px;
@@ -34,10 +34,10 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        #menu button:hover, #skillTree button:hover, #settings button:hover, #advancedShop button:hover, #scoreShop button:hover {
+        #menu button:hover, #skillTree button:hover, #settings button:hover, #advancedShop button:hover, #scoreShop button:hover, #inventory button:hover { /* Added #inventory */
             background-color: #555555;
         }
-        #menu button:disabled, #skillTree button:disabled, #settings button:disabled, #advancedShop button:disabled, #scoreShop button:disabled {
+        #menu button:disabled, #skillTree button:disabled, #settings button:disabled, #advancedShop button:disabled, #scoreShop button:disabled, #inventory button:disabled { /* Added #inventory */
             background-color: #1a1a1a;
             cursor: not-allowed;
         }
@@ -54,57 +54,65 @@
             bottom: 10px;
             font-size: 16px;
         }
-        #popup {
+        #popup, #rebirthPopup {
             display: none;
             position: absolute;
             background-color: white;
             border: 2px solid black;
             padding: 20px;
             z-index: 1000;
+            color: black;
+        }
+        #popup .ok-button, #rebirthPopup .ok-button {
+            margin-top: 10px;
+            padding: 5px;
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        #rebirthPopup {
+            background-color: #808080;
+        }
+        #highScore, #multiplierDisplay, #scoreCoinMultiplierDisplay, #comboMultiplierDisplay, #comboCountdownDisplay, #sizeDisplay, #highSizeDisplay, #scoreCoinsDisplay {
+            position: absolute;
+            font-size: 16px;
         }
         #highScore {
-            position: absolute;
             top: 10px;
             right: 10px;
-            font-size: 16px;
         }
         #multiplierDisplay {
-            position: absolute;
+            top: 30px;
+            right: 10px;
+        }
+        #scoreCoinMultiplierDisplay {
             top: 50px;
             right: 10px;
-            font-size: 16px;
-        }
-        #scoreMultiplierDisplay {
-            position: absolute;
-            top: 90px;
-            right: 10px;
-            font-size: 16px;
         }
         #comboMultiplierDisplay {
-            position: absolute;
-            top: 130px;
+            top: 70px;
             right: 10px;
-            font-size: 16px;
             display: none;
         }
         #comboCountdownDisplay {
-            position: absolute;
-            top: 170px;
+            top: 90px;
             right: 10px;
-            font-size: 16px;
             display: none;
         }
-        #scoreCoinsDisplay {
-            position: absolute;
-            top: 10px;
-            right: 200px;
-            font-size: 20px;
-        }
         #sizeDisplay {
-            position: absolute;
-            top: 210px;
+            top: 110px;
             right: 10px;
-            font-size: 16px;
+        }
+        #highSizeDisplay {
+            top: 130px;
+            right: 10px;
+        }
+        #scoreCoinsDisplay {
+            top: 150px;
+            right: 10px;
+            font-size: 20px;
         }
         #coinEditor {
             display: none;
@@ -113,9 +121,7 @@
             border: 2px solid black;
             padding: 20px;
             z-index: 1000;
-        }
-        #advancedShop, #scoreShop {
-            background-color: purple;
+            color: black;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-6gWxzMvUgj4aJngb75Sx1Hj7FL6gFR4TFNT/3pZfQg+8E3/ztAGbcndmRQyZQyzc6F6doePXY5a/PP39S/aBfw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -125,12 +131,25 @@
     <div id="cooldownDisplay"></div>
     <div id="highScore">High Score: <span id="highScoreDisplay">0</span></div>
     <div id="multiplierDisplay">Multiplier: <span id="multiplierValue">1x</span></div>
-    <div id="scoreMultiplierDisplay">Score Multiplier: <span id="scoreMultiplierValue">1x</span></div>
+    <div id="scoreCoinMultiplierDisplay">Score Coin Multiplier: <span id="scoreCoinMultiplierValue">1x</span></div>
     <div id="comboMultiplierDisplay">Combo Multiplier: <span id="comboMultiplierValue">1x</span></div>
     <div id="comboCountdownDisplay">Countdown: <span id="comboCountdownValue">2.00</span></div>
+    <div id="sizeDisplay">Size: <span id="sizeValue">1</span></div>
+    <div id="highSizeDisplay">High Size Score: <span id="highSizeValue">1</span></div>
     <div id="scoreCoinsDisplay">Score: <span id="scoreDisplay">0</span> | Coins: <span id="coinsDisplay">0</span></div>
-    <div id="sizeDisplay">Size: <span id="sizeValue">1</span> | High Size: <span id="highSizeValue">1</span></div>
-    <div id="popup"><span id="popupText"></span><br><button id="popupOkButton">OK</button></div>
+    <div id="popup">
+        <p id="popupText"></p>
+        <button id="popupOkButton" class="ok-button">OK</button>
+    </div>
+    <div id="rebirthPopup">
+        <p id="rebirthPopupText">You have rebirthed!</p>
+        <ul>
+            <li>All progress has reset</li>
+            <li>You have unlocked crafting</li>
+            <li>Your coins have doubled</li>
+        </ul>
+        <button id="rebirthPopupOkButton" class="ok-button">OKAY</button>
+    </div>
     <div id="coinEditor">
         <p>Enter the desired amount of coins:</p>
         <input type="number" id="coinInput" value="0">
@@ -143,7 +162,9 @@
         <button id="shopButton"><i class="fas fa-cogs"></i> Shop</button>
         <button id="advancedShopButton"><i class="fas fa-store"></i> Advanced Shop (500 coins)</button>
         <button id="scoreShopButton" style="display: none;"><i class="fas fa-chart-line"></i> Score Shop</button>
+        <button id="rebirthButton" style="display: none;"><i class="fas fa-redo-alt"></i> Rebirth (500,000 coins)</button>
         <button id="settingsButton"><i class="fas fa-cog"></i> Settings</button>
+        <button id="inventoryButton" style="display: none;"><i class="fas fa-box"></i> Inventory</button> <!-- New Inventory Button -->
     </div>
     <div id="skillTree">
         <button id="backToMenuButton"><i class="fas fa-arrow-left"></i> Back to Menu</button>
@@ -168,16 +189,22 @@
         <button id="sprintButton"><i class="fas fa-running"></i> Buy Sprint Ability (250 coins)</button>
         <button id="comboUpgradeButton"><i class="fas fa-stopwatch"></i> Add 3 Seconds to Combo Duration (300 coins)</button>
         <button id="unlockRainbowApplesButton"><i class="fas fa-apple-alt"></i> Unlock Rainbow Apples (200 coins)</button>
-        <button id="tripleScoreButton"><i class="fas fa-star"></i> 3x Score (700 coins)</button>
         <button id="limitlessComboButton"><i class="fas fa-infinity"></i> Limitless Combo (100,000 coins)</button>
-        <button id="realLimitlessComboButton"><i class="fas fa-infinity"></i> Real Limitless Combo (3,000,000 coins)</button>
-        <button id="rebirthButton"><i class="fas fa-sync-alt"></i> Rebirth (500,000 coins)</button>
+        <button id="tripleScoreButton"><i class="fas fa-star"></i> 3x Score (700 coins)</button>
     </div>
     <div id="scoreShop">
         <button id="backToMenuFromScoreShopButton"><i class="fas fa-arrow-left"></i> Back to Menu</button>
         <p>Score Shop</p>
         <p>Coins: <span id="scoreShopCoinCount">0</span></p>
         <button id="increaseRainbowApplesButton" disabled><i class="fas fa-apple-alt"></i> Increase Rainbow Apple Odds (100 coins)</button>
+    </div>
+    <div id="inventory" style="display: none;"> <!-- New Inventory Section -->
+        <button id="backToMenuFromInventoryButton"><i class="fas fa-arrow-left"></i> Back to Menu</button>
+        <p>Inventory</p>
+        <p>Normal Apples: <span id="normalApplesCount">0</span></p>
+        <p>Mega Apples: <span id="megaApplesCount">0</span></p>
+        <p>Golden Apples: <span id="goldenApplesCount">0</span></p>
+        <p>Rainbow Apples: <span id="rainbowApplesCount">0</span></p>
     </div>
     <div id="settings">
         <button id="backToMenuFromSettingsButton"><i class="fas fa-arrow-left"></i> Back to Menu</button>
@@ -187,7 +214,7 @@
     </div>
     <audio id="deathSound" src="https://github.com/FearOfPixelation/SnakeGame/raw/main/Predator_Jumped_by_Redacted%20(1).mp3"></audio>
     <audio id="eatSound" src="https://github.com/FearOfPixelation/SnakeGame/raw/main/coin_cropped.mp3"></audio>
-    <audio id="rainbowEatSound" src="https://github.com/FearOfPixelation/SnakeGame/raw/main/coinbig_cropped.mp3"></audio>
+    <audio id="eatRainbowSound" src="https://github.com/FearOfPixelation/SnakeGame/raw/main/coinbig_cropped.mp3"></audio>
     <audio id="backgroundMusic" src="https://github.com/FearOfPixelation/SnakeGame/raw/main/Mechanical_Madness_Boss1%20(1).mp3" loop></audio>
     <script>
         const body = document.getElementById("body");
@@ -195,12 +222,13 @@
         const ctx = canvas.getContext("2d");
         const deathSound = document.getElementById("deathSound");
         const eatSound = document.getElementById("eatSound");
-        const rainbowEatSound = document.getElementById("rainbowEatSound");
+        const eatRainbowSound = document.getElementById("eatRainbowSound");
         const backgroundMusic = document.getElementById("backgroundMusic");
         const retryButton = document.getElementById("retryButton");
         const shopButton = document.getElementById("shopButton");
         const advancedShopButton = document.getElementById("advancedShopButton");
         const scoreShopButton = document.getElementById("scoreShopButton");
+        const rebirthButton = document.getElementById("rebirthButton");
         const settingsButton = document.getElementById("settingsButton");
         const backToMenuButton = document.getElementById("backToMenuButton");
         const backToMenuFromSettingsButton = document.getElementById("backToMenuFromSettingsButton");
@@ -223,41 +251,29 @@
         const comboUpgradeButton = document.getElementById("comboUpgradeButton");
         const unlockRainbowApplesButton = document.getElementById("unlockRainbowApplesButton");
         const increaseRainbowApplesButton = document.getElementById("increaseRainbowApplesButton");
-        const limitlessComboButton = document.getElementById("limitlessComboButton");
-        const realLimitlessComboButton = document.getElementById("realLimitlessComboButton");
-        const rebirthButton = document.getElementById("rebirthButton");
         const tripleScoreButton = document.getElementById("tripleScoreButton");
+        const limitlessComboButton = document.getElementById("limitlessComboButton");
         const coinCountDisplay = document.getElementById("coinCount");
         const advancedCoinCountDisplay = document.getElementById("advancedCoinCount");
         const scoreShopCoinCountDisplay = document.getElementById("scoreShopCoinCount");
         const highScoreDisplay = document.getElementById("highScoreDisplay");
-        const multiplierDisplay = document.getElementById("multiplierDisplay");
         const multiplierValue = document.getElementById("multiplierValue");
-        const scoreMultiplierDisplay = document.getElementById("scoreMultiplierDisplay");
-        const scoreMultiplierValue = document.getElementById("scoreMultiplierValue");
-        const comboMultiplierDisplay = document.getElementById("comboMultiplierDisplay");
+        const scoreCoinMultiplierValue = document.getElementById("scoreCoinMultiplierValue");
         const comboMultiplierValue = document.getElementById("comboMultiplierValue");
-        const comboCountdownDisplay = document.getElementById("comboCountdownDisplay");
         const comboCountdownValue = document.getElementById("comboCountdownValue");
-        const scoreCoinsDisplay = document.getElementById("scoreCoinsDisplay");
-        const scoreDisplay = document.getElementById("scoreDisplay");
-        const coinsDisplay = document.getElementById("coinsDisplay");
-        const sizeDisplay = document.getElementById("sizeDisplay");
         const sizeValue = document.getElementById("sizeValue");
         const highSizeValue = document.getElementById("highSizeValue");
+        const scoreDisplay = document.getElementById("scoreDisplay");
+        const coinsDisplay = document.getElementById("coinsDisplay");
         const biggerMenuCountDisplay = document.getElementById("biggerMenuCount");
         const extraBiggerMenuCountDisplay = document.getElementById("extraBiggerMenuCount");
         const megaAppleCountDisplay = document.getElementById("megaAppleCount");
         const goldenAppleCountDisplay = document.getElementById("goldenAppleCount");
-        const menu = document.getElementById("menu");
-        const skillTree = document.getElementById("skillTree");
-        const settings = document.getElementById("settings");
-        const advancedShop = document.getElementById("advancedShop");
-        const scoreShop = document.getElementById("scoreShop");
-        const cooldownDisplay = document.getElementById("cooldownDisplay");
         const popup = document.getElementById("popup");
         const popupText = document.getElementById("popupText");
         const popupOkButton = document.getElementById("popupOkButton");
+        const rebirthPopup = document.getElementById("rebirthPopup");
+        const rebirthPopupOkButton = document.getElementById("rebirthPopupOkButton");
         const coinEditor = document.getElementById("coinEditor");
         const coinInput = document.getElementById("coinInput");
         const setCoinsButton = document.getElementById("setCoinsButton");
@@ -269,6 +285,8 @@
         let tileCountY = canvas.height / gridSize;
         let snake = [{ x: 10, y: 10 }];
         let direction = { x: 0, y: 0 };
+        let lastDirection = { x: 0, y: 0 };
+        let directionQueue = [];
         let apple = { x: 15, y: 15, type: "normal" };
         let score = 0;
         let highScore = 0;
@@ -297,15 +315,16 @@
         let rainbowAppleOddsCost = [100, 200, 300];
         let rainbowAppleOddsCount = 0;
         let megaAppleCount = 0;
-        let megaAppleRate = 0.05;
+        let megaAppleRate = 0.025;
         let goldenAppleCount = 0;
-        let goldenAppleRate = 0.00;
+        let goldenAppleRate = 0.005;
         let darkMode = true;
         let soundEffectsEnabled = true;
         let musicEnabled = true;
         let slowDownCooldown = false;
         let cooldownTime = 0;
         let advancedShopPurchased = false;
+        let limitlessShopPurchased = false;
         let extraCoinMultiplierCount = 0;
         let extraCoinMultiplierCost = [100, 250, 300, 450, 600, 650, 750, 1000, 1250, 1500];
         let goldenAppleOddsCount = 0;
@@ -325,8 +344,13 @@
         };
         let invincibility = false;
         let rainbowAppleColors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
-        let maxComboMultiplier = 6;
-        let rebirthPurchased = false;
+        let rebirthCount = 0;
+        let permMultiplier = 1;
+        let maxComboMultiplier = 6; // Default max combo multiplier
+        let normalApples = 0; // Inventory counts
+        let megaApples = 0;
+        let goldenApples = 0;
+        let rainbowApples = 0;
 
         function gameLoop() {
             update();
@@ -334,41 +358,53 @@
         }
 
         function update() {
+            // Process the direction queue
+            if (directionQueue.length > 0) {
+                const newDirection = directionQueue.shift();
+                if ((newDirection.x !== -lastDirection.x || newDirection.y !== -lastDirection.y) && (newDirection.x !== 0 || newDirection.y !== 0)) {
+                    direction = newDirection;
+                }
+            }
+
             const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
             if (head.x === apple.x && head.y === apple.y) {
                 let baseCoinMultiplier = score >= 1000 ? 8.5 : score >= 800 ? 5 : score >= 400 ? 4 : score >= 200 ? 3 : score >= 100 ? 2.5 : score >= 70 ? 2 : score >= 40 ? 1.5 : score >= 20 ? 1.25 : 1;
                 let coinMultiplier = (isDoubleCoinsEnabled ? 2 : 0) + (isExtraCoinMultiplierEnabled ? extraCoinMultiplierCount : 0) + baseCoinMultiplier;
                 let scoreMultiplier = (isDoubleScoreEnabled ? 2 : 0) + (isTripleScoreEnabled ? 3 : 0) + 1;
+                scoreMultiplier *= permMultiplier;
 
                 if (apple.type === "normal") {
                     score += 1 * scoreMultiplier * comboMultiplier;
                     coins += 1 * coinMultiplier * comboMultiplier;
-                    playSound(eatSound);
+                    normalApples++; // Track normal apples
+                    if (soundEffectsEnabled) playSound(eatSound);
                 } else if (apple.type === "mega") {
                     score += 5 * scoreMultiplier * comboMultiplier;
                     coins += 10 * coinMultiplier * comboMultiplier;
-                    playSound(eatSound);
+                    megaApples++; // Track mega apples
+                    if (soundEffectsEnabled) playSound(eatSound);
                 } else if (apple.type === "golden") {
                     score += 10 * scoreMultiplier * comboMultiplier;
                     coins += 50 * coinMultiplier * comboMultiplier;
-                    playSound(eatSound);
+                    goldenApples++; // Track golden apples
+                    if (soundEffectsEnabled) playSound(eatSound);
                 } else if (apple.type === "rainbow") {
                     score += 100 * scoreMultiplier * comboMultiplier;
                     coins += 100 * coinMultiplier * comboMultiplier;
-                    playSound(rainbowEatSound);
-                }
-                size++;
-                if (size > highSize) {
-                    highSize = size;
+                    rainbowApples++; // Track rainbow apples
+                    if (soundEffectsEnabled) playSound(eatRainbowSound);
                 }
                 spawnApple();
+                size++;
+                if (size > highSize) highSize = size;
+                updateSizeDisplay();
 
                 // Handle combo multiplier
                 if (isComboMultiplierEnabled) {
                     clearTimeout(comboTimeout);
                     clearInterval(comboCountdownInterval);
-                    comboMultiplier = Math.min(comboMultiplier + 1, maxComboMultiplier); // Max combo multiplier is 6x or 60x with limitless combo
+                    comboMultiplier = Math.min(comboMultiplier + 1, maxComboMultiplier); // Max combo multiplier is now dynamic
                     comboCountdown = comboDuration;
                     comboCountdownInterval = setInterval(updateComboCountdown, 10);
                     comboTimeout = setTimeout(() => {
@@ -383,7 +419,6 @@
             }
 
             if (!invincibility && (head.x < 0 || head.x >= tileCountX || head.y < 0 || head.y >= tileCountY || snake.some(segment => segment.x === head.x && segment.y === head.y))) {
-                playSound(deathSound);
                 clearInterval(gameInterval);
                 clearInterval(comboCountdownInterval);
                 if (score > highScore) {
@@ -395,6 +430,7 @@
             }
 
             snake.unshift(head);
+            lastDirection = direction;
             updateScoreAndCoinsDisplay();
             updateMultiplierDisplay();
             updateButtonStates();
@@ -403,34 +439,7 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            let snakeColor = "green";
-            let baseCoinMultiplier = 1;
-            if (score >= 1000) {
-                baseCoinMultiplier = 8.5;
-                snakeColor = darkMode ? "white" : "black";
-            } else if (score >= 800) {
-                baseCoinMultiplier = 5;
-                snakeColor = darkMode ? "white" : "black";
-            } else if (score >= 400) {
-                baseCoinMultiplier = 4;
-                snakeColor = darkMode ? "white" : "black";
-            } else if (score >= 200) {
-                baseCoinMultiplier = 3;
-                snakeColor = darkMode ? "white" : "black";
-            } else if (score >= 100) {
-                baseCoinMultiplier = 2.5;
-                snakeColor = darkMode ? "white" : "black";
-            } else if (score >= 70) {
-                baseCoinMultiplier = 2;
-                snakeColor = darkMode ? "white" : "black";
-            } else if (score >= 40) {
-                baseCoinMultiplier = 1.5;
-                snakeColor = "orange";
-            } else if (score >= 20) {
-                baseCoinMultiplier = 1.25;
-                snakeColor = "blue";
-            }
-
+            let snakeColor = getSnakeColor(score);
             snake.forEach(segment => {
                 ctx.fillStyle = snakeColor;
                 ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
@@ -454,15 +463,47 @@
             return rainbowAppleColors[Math.floor(Math.random() * rainbowAppleColors.length)];
         }
 
+        function getSnakeColor(score) {
+            if (score >= 1000000) return darkMode ? "white" : "black";
+            if (score >= 100000) return "purple";
+            if (score >= 50000) return "pink";
+            if (score >= 30000) return "brown";
+            if (score >= 12500) return "black";
+            if (score >= 10000) return "gray";
+            if (score >= 7500) return "blue";
+            if (score >= 5000) return "orange";
+            if (score >= 1500) return "yellow";
+            if (score >= 1000) return darkMode ? "white" : "black";
+            if (score >= 800) return darkMode ? "white" : "black";
+            if (score >= 400) return darkMode ? "white" : "black";
+            if (score >= 200) return darkMode ? "white" : "black";
+            if (score >= 100) return darkMode ? "white" : "black";
+            if (score >= 70) return darkMode ? "white" : "black";
+            if (score >= 40) return "orange";
+            if (score >= 20) return "blue";
+            return "green";
+        }
+
         function changeDirection() {
-            if (keysPressed.up && direction.y === 0) {
-                direction = { x: 0, y: -1 };
-            } else if (keysPressed.down && direction.y === 0) {
-                direction = { x: 0, y: 1 };
-            } else if (keysPressed.left && direction.x === 0) {
-                direction = { x: -1, y: 0 };
-            } else if (keysPressed.right && direction.x === 0) {
-                direction = { x: 1, y: 0 };
+            const newDirection = { ...direction };
+
+            if (keysPressed.up && lastDirection.y === 0) {
+                newDirection.x = 0;
+                newDirection.y = -1;
+            } else if (keysPressed.down && lastDirection.y === 0) {
+                newDirection.x = 0;
+                newDirection.y = 1;
+            } else if (keysPressed.left && lastDirection.x === 0) {
+                newDirection.x = -1;
+                newDirection.y = 0;
+            } else if (keysPressed.right && lastDirection.x === 0) {
+                newDirection.x = 1;
+                newDirection.y = 0;
+            }
+
+            // Push the new direction to the queue
+            if (newDirection.x !== direction.x || newDirection.y !== direction.y) {
+                directionQueue.push(newDirection);
             }
         }
 
@@ -478,14 +519,17 @@
         function resetGame() {
             snake = [{ x: 10, y: 10 }];
             direction = { x: 0, y: 0 };
+            lastDirection = { x: 0, y: 0 };
+            directionQueue = [];
             spawnApple();
             score = 0;
-            size = 1;
             comboMultiplier = 1;
             comboCountdown = comboDuration;
+            size = 1;
             updateComboCountdownDisplay();
             updateMultiplierDisplay(); // Update multiplier before the game starts
             updateScoreAndCoinsDisplay(); // Update score and coins before the game starts
+            updateSizeDisplay();
             clearInterval(gameInterval);  // Clear any existing intervals
             clearInterval(comboCountdownInterval); // Clear the combo countdown interval
             gameInterval = setInterval(gameLoop, baseInterval);
@@ -519,6 +563,7 @@
             settings.style.display = 'none';
             advancedShop.style.display = 'none';
             scoreShop.style.display = 'none';
+            inventory.style.display = 'none';
             canvas.style.display = 'none';
             updateCoinCount();
             updateMultiplierDisplay(); // Update multiplier after the game ends
@@ -531,6 +576,7 @@
             settings.style.display = 'none';
             advancedShop.style.display = 'none';
             scoreShop.style.display = 'none';
+            inventory.style.display = 'none';
             canvas.style.display = 'block';
         }
 
@@ -572,13 +618,22 @@
             }
         }
 
+        function displayInventory() {
+            inventory.style.display = 'flex';
+            menu.style.display = 'none';
+            document.getElementById('normalApplesCount').textContent = normalApples;
+            document.getElementById('megaApplesCount').textContent = megaApples;
+            document.getElementById('goldenApplesCount').textContent = goldenApples;
+            document.getElementById('rainbowApplesCount').textContent = rainbowApples;
+        }
+
         function toggleDarkMode() {
             darkMode = !darkMode;
             body.style.backgroundColor = darkMode ? "#121212" : "#f0f0f0";
             body.style.color = darkMode ? "#ffffff" : "#000000";
             canvas.style.borderColor = darkMode ? "#ffffff" : "#000000";
-            popup.style.backgroundColor = darkMode ? "#000000" : "#ffffff"; // Fix popup background color
-            popup.style.color = darkMode ? "#ffffff" : "#000000"; // Fix popup text color
+            popup.style.color = darkMode ? "white" : "black"; // Fix popup text color
+            popup.style.backgroundColor = darkMode ? "black" : "white"; // Fix popup background color
             scoreCoinsDisplay.style.color = darkMode ? "#ffffff" : "#000000"; // Fix score and coins text color
             cooldownDisplay.style.color = darkMode ? "#ffffff" : "#000000"; // Fix debug text color
         }
@@ -620,20 +675,25 @@
         function updateMultiplierDisplay() {
             let baseCoinMultiplier = score >= 1000 ? 8.5 : score >= 800 ? 5 : score >= 400 ? 4 : score >= 200 ? 3 : score >= 100 ? 2.5 : score >= 70 ? 2 : score >= 40 ? 1.5 : score >= 20 ? 1.25 : 1;
             let totalMultiplier = baseCoinMultiplier + (isDoubleCoinsEnabled ? 2 : 0) + (isExtraCoinMultiplierEnabled ? extraCoinMultiplierCount : 0);
-            let scoreMultiplier = score >= 1000000 ? 100 : score >= 100000 ? 60 : score >= 50000 ? 45 : score >= 30000 ? 30 : score >= 12500 ? 20 : score >= 10000 ? 17.5 : score >= 7500 ? 14 : score >= 5000 ? 12.5 : score >= 1500 ? 10 : score >= 1000 ? 8.5 : score >= 800 ? 5 : score >= 400 ? 4 : score >= 200 ? 3 : score >= 100 ? 2.5 : score >= 70 ? 2 : score >= 40 ? 1.5 : score >= 20 ? 1.25 : 1;
             multiplierValue.textContent = totalMultiplier.toFixed(2) + 'x';
-            scoreMultiplierValue.textContent = scoreMultiplier.toFixed(2) + 'x';
+            scoreCoinMultiplierValue.textContent = baseCoinMultiplier.toFixed(2) + 'x'; // Update score coin multiplier display
             comboMultiplierValue.textContent = comboMultiplier.toFixed(2) + 'x';
         }
 
         function updateScoreAndCoinsDisplay() {
             scoreDisplay.textContent = score;
             coinsDisplay.textContent = coins;
-            sizeValue.textContent = size;
-            highSizeValue.textContent = highSize;
             if (score >= 100) {
                 scoreShopButton.style.display = 'inline-block';
             }
+            if (limitlessShopPurchased) {
+                rebirthButton.style.display = 'inline-block';
+            }
+        }
+
+        function updateSizeDisplay() {
+            sizeValue.textContent = size;
+            highSizeValue.textContent = highSize;
         }
 
         function updateButtonStates() {
@@ -682,13 +742,10 @@
             tripleScoreButton.disabled = coins < 700 || isTripleScoreEnabled;
             tripleScoreButton.className = tripleScoreButton.disabled ? "disabled" : "";
 
-            limitlessComboButton.disabled = coins < 100000 || maxComboMultiplier > 6;
+            limitlessComboButton.disabled = coins < 100000 || limitlessShopPurchased;
             limitlessComboButton.className = limitlessComboButton.disabled ? "disabled" : "";
 
-            realLimitlessComboButton.disabled = coins < 3000000 || maxComboMultiplier > 60;
-            realLimitlessComboButton.className = realLimitlessComboButton.disabled ? "disabled" : "";
-
-            rebirthButton.disabled = coins < 500000 || rebirthPurchased;
+            rebirthButton.disabled = coins < 500000 || rebirthCount > 0;
             rebirthButton.className = rebirthButton.disabled ? "disabled" : "";
 
             advancedShopButton.disabled = coins < 500 && !advancedShopPurchased;
@@ -700,6 +757,7 @@
                 updateMultiplierDisplay();
                 updateComboCountdownDisplay();
                 updateScoreAndCoinsDisplay();
+                updateSizeDisplay();
                 updateButtonStates();
             }, 1000);
         }
@@ -725,6 +783,10 @@
 
         backToMenuFromScoreShopButton.addEventListener("click", displayMenu);
 
+        backToMenuFromInventoryButton.addEventListener("click", displayMenu);
+
+        inventoryButton.addEventListener("click", displayInventory);
+
         toggleDarkModeButton.addEventListener("click", toggleDarkMode);
 
         toggleSoundEffectsButton.addEventListener("click", toggleSoundEffects);
@@ -737,8 +799,7 @@
                 isSlowDownEnabled = true;
                 slowDownButton.disabled = true;
                 updateCoinCount();
-                popupText.textContent = "Hold the Z button to slow down (only works up to 5 seconds)";
-                popup.style.display = "block";
+                showPopup("Hold the Z button to slow down (only works up to 5 seconds)");
             }
         });
 
@@ -859,53 +920,12 @@
             }
         });
 
-        limitlessComboButton.addEventListener("click", () => {
-            if (coins >= 100000) {
-                coins -= 100000;
-                maxComboMultiplier = 60;
-                limitlessComboButton.disabled = true;
-                updateCoinCount();
-            }
-        });
-
-        realLimitlessComboButton.addEventListener("click", () => {
-            if (coins >= 3000000) {
-                coins -= 3000000;
-                maxComboMultiplier = 100;
-                realLimitlessComboButton.disabled = true;
-                updateCoinCount();
-            }
-        });
-
-        rebirthButton.addEventListener("click", () => {
-            if (coins >= 500000) {
-                coins -= 500000;
-                rebirthPurchased = true;
-                rebirthButton.disabled = true;
-                isDoubleCoinsEnabled = false;
-                isDoubleScoreEnabled = false;
-                isTripleScoreEnabled = false;
-                isExtraCoinMultiplierEnabled = false;
-                isSprintEnabled = false;
-                isComboMultiplierEnabled = false;
-                isComboUpgradePurchased = false;
-                isRainbowApplesUnlocked = false;
-                extraCoinMultiplierCount = 0;
-                goldenAppleOddsCount = 0;
-                rainbowAppleOddsCount = 0;
-                maxComboMultiplier = 6;
-                resetGame();
-                coins = 0;
-                updateCoinCount();
-            }
-        });
-
         megaAppleButton.addEventListener("click", () => {
             if (coins >= 50 && megaAppleCount < 3) {
                 coins -= 50;
                 megaAppleCount++;
-                megaAppleRate = megaAppleCount === 1 ? 0.075 : megaAppleCount === 2 ? 0.1 : 0.135;
-                goldenAppleRate = megaAppleCount === 1 ? 0.005 : megaAppleCount === 2 ? 0.015 : 0.015;
+                megaAppleRate = megaAppleCount === 1 ? 0.075 : megaAppleCount === 2 ? 0.1 : 0.125;
+                goldenAppleRate = megaAppleCount === 1 ? 0.005 : megaAppleCount === 2 ? 0.01 : 0.015;
                 updateCoinCount();
                 megaAppleCountDisplay.textContent = 3 - megaAppleCount;
                 if (megaAppleCount === 3) {
@@ -943,7 +963,7 @@
             if (coins >= goldenAppleOddsCost[goldenAppleOddsCount] && goldenAppleOddsCount < 3) {
                 coins -= goldenAppleOddsCost[goldenAppleOddsCount];
                 goldenAppleOddsCount++;
-                goldenAppleRate = goldenAppleOddsCount === 1 ? 0.015 : goldenAppleOddsCount === 2 ? 0.03 : 0.045;
+                goldenAppleRate = goldenAppleCount === 1 ? 0.005 : goldenAppleCount === 2 ? 0.01 : 0.015;
                 updateCoinCount();
                 if (goldenAppleOddsCount < 3) {
                     goldenAppleOddsButton.textContent = "Increase Golden Apple Odds (Next Cost: " + goldenAppleOddsCost[goldenAppleOddsCount] + " coins)";
@@ -959,9 +979,103 @@
                 coins -= 250;
                 isSprintEnabled = true;
                 sprintButton.disabled = true;
-                popupText.textContent = "Click the X key to sprint";
-                popup.style.display = "block";
                 updateCoinCount();
+                showPopup("Click the X key to sprint");
+            }
+        });
+
+        limitlessComboButton.addEventListener("click", () => {
+            if (coins >= 100000) {
+                coins -= 100000;
+                limitlessShopPurchased = true;
+                maxComboMultiplier = 60; // Increase combo multiplier limit to 60x
+                limitlessComboButton.disabled = true;
+                rebirthButton.style.display = 'inline-block';
+                updateCoinCount();
+            }
+        });
+
+        rebirthButton.addEventListener("click", () => {
+            if (coins >= 500000 && rebirthCount === 0) {
+                coins = 0;
+                isSlowDownEnabled = false;
+                isDoubleCoinsEnabled = false;
+                isDoubleScoreEnabled = false;
+                isTripleScoreEnabled = false;
+                isExtraCoinMultiplierEnabled = false;
+                isSprintEnabled = false;
+                isComboMultiplierEnabled = false;
+                isComboUpgradePurchased = false;
+                isRainbowApplesUnlocked = false;
+                rainbowAppleRate = 0;
+                megaAppleRate = 0.025;
+                goldenAppleRate = 0.005;
+                comboPurchaseCount = 0;
+                extraCoinMultiplierCount = 0;
+                goldenAppleOddsCount = 0;
+                comboMultiplierCost = 75;
+                maxComboMultiplier = 6;
+                advancedShopPurchased = false;
+                limitlessShopPurchased = false;
+
+                // Reset all button states
+                biggerMenuCount = 3;
+                extraBiggerMenuCount = 1;
+                biggerMenuButton.disabled = false;
+                extraBiggerMenuButton.disabled = false;
+                biggerMenuButton.textContent = "Buy Bigger Menu (50 coins) - Remaining: " + biggerMenuCount;
+                extraBiggerMenuButton.textContent = "Buy Extra Bigger Menu (150 coins)";
+                
+                doubleCoinsButton.disabled = false;
+                doubleCoinsButton.textContent = "Buy Double Coins (100 coins)";
+                
+                doubleScoreButton.disabled = false;
+                doubleScoreButton.textContent = "Buy Double Score (100 coins)";
+                
+                comboMultiplierButton.disabled = false;
+                comboMultiplierButton.textContent = "Buy Combo Multiplier (75 coins)";
+                
+                megaAppleButton.disabled = false;
+                megaAppleButton.textContent = "Increase the odds of mega apples (50 coins) - Remaining: " + (3 - megaAppleCount);
+                
+                reduceCooldownButton.disabled = false;
+                reduceCooldownButton.textContent = "Reduce Cooldown (250 coins)";
+                
+                extraCoinMultiplierButton.disabled = false;
+                extraCoinMultiplierButton.textContent = "+1x Multiplier (Next Cost: 100 coins)";
+                
+                goldenAppleOddsButton.disabled = false;
+                goldenAppleOddsButton.textContent = "Increase Golden Apple Odds (Next Cost: 100 coins)";
+                
+                sprintButton.disabled = false;
+                sprintButton.textContent = "Buy Sprint Ability (250 coins)";
+                
+                comboUpgradeButton.disabled = false;
+                comboUpgradeButton.textContent = "Add 3 Seconds to Combo Duration (300 coins)";
+                
+                unlockRainbowApplesButton.disabled = false;
+                unlockRainbowApplesButton.textContent = "Unlock Rainbow Apples (200 coins)";
+                
+                increaseRainbowApplesButton.disabled = false;
+                increaseRainbowApplesButton.textContent = "Increase Rainbow Apple Odds (Next Cost: 100 coins)";
+                
+                tripleScoreButton.disabled = false;
+                tripleScoreButton.textContent = "3x Score (700 coins)";
+                
+                limitlessComboButton.disabled = false;
+                limitlessComboButton.textContent = "Limitless Combo (100,000 coins)";
+                
+                rebirthButton.disabled = true;
+                rebirthButton.style.display = 'none';
+
+                // Show the inventory button after the first rebirth
+                inventoryButton.style.display = 'inline-block';
+
+                updateButtonStates();
+                updateCoinCount();
+                
+                rebirthCount++;
+                showRebirthPopup();
             }
         });
 
@@ -983,16 +1097,31 @@
             gameInterval = setInterval(gameLoop, baseInterval);
         });
 
-        popupOkButton.addEventListener("click", () => {
-            popup.style.display = "none";
-        });
-
         function updateCoinCount() {
             coinCountDisplay.textContent = coins;
             advancedCoinCountDisplay.textContent = coins;
             scoreShopCoinCountDisplay.textContent = coins;
             updateButtonStates();
         }
+
+        function showPopup(message) {
+            popupText.textContent = message;
+            popup.style.display = "block";
+        }
+
+        function showRebirthPopup() {
+            rebirthPopup.style.display = "block";
+        }
+
+        popupOkButton.addEventListener("click", () => {
+            popup.style.display = "none";
+        });
+
+        rebirthPopupOkButton.addEventListener("click", () => {
+            rebirthPopup.style.display = "none";
+            resetGame();
+            hideMenu();
+        });
 
         document.addEventListener("keydown", (event) => {
             switch (event.key) {
@@ -1006,15 +1135,23 @@
                     if (keysPressed.q) keysPressed.e = true;
                     break;
                 case "ArrowUp":
+                case "w":
+                case "W":
                     keysPressed.up = true;
                     break;
                 case "ArrowDown":
+                case "s":
+                case "S":
                     keysPressed.down = true;
                     break;
                 case "ArrowLeft":
+                case "a":
+                case "A":
                     keysPressed.left = true;
                     break;
                 case "ArrowRight":
+                case "d":
+                case "D":
                     keysPressed.right = true;
                     break;
                 case "z":
@@ -1048,7 +1185,7 @@
                     }
                     break;
                 case " ":
-                    if (menu.style.display === 'flex') {
+                    if (menu.style.display === "flex") {
                         resetGame();
                         hideMenu();
                     }
@@ -1074,15 +1211,23 @@
                     keysPressed.e = false;
                     break;
                 case "ArrowUp":
+                case "w":
+                case "W":
                     keysPressed.up = false;
                     break;
                 case "ArrowDown":
+                case "s":
+                case "S":
                     keysPressed.down = false;
                     break;
                 case "ArrowLeft":
+                case "a":
+                case "A":
                     keysPressed.left = false;
                     break;
                 case "ArrowRight":
+                case "d":
+                case "D":
                     keysPressed.right = false;
                     break;
                 case "x":
